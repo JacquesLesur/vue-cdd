@@ -160,24 +160,40 @@
             </style>
 </head>
 <body>
-        cxwcx
+    <div class="row justify-content-center">
         <form id="main" v-cloak>
 
-                <div class="bar">
+                
                     <!-- Create a binding between the searchString model and the text field -->
-            
-                    <input type="text" v-model="dateStart" placeholder="Date Arrivée" />
-                    <input type="text" v-model="dateEnd" placeholder="Date Départ" />
+            <div class="card">
+                <div class="card-body">
+                    <input class="row"type="text" v-model="dateStart" placeholder="Date Arrivée" />
+                    <input class="row"type="text" v-model="dateEnd" placeholder="Date Départ" />
+                    <input class="row"type="text" v-model="ETP" placeholder="Nbr d'heure hebdomadaire" />
                     
                     <template>
                             <button type="button" @click="clic" class="btn btn-info">Valider</button>
                     </template>
                 </div>
-                <span>Nombres de jours: {{ contractTime }}</span>
-                <span> et nombres de de congés: {{ daysOff }}</span>
+            </div>
+                <div class="alert alert-success" role="alert">
+                    Nombres de jours: {{ contractTime }}
+                  </div>
+                  <div class="alert alert-success" role="alert">
+                    Nombres de congés: {{ daysOff }}
+                  </div>
+                  <div class="alert alert-success" role="alert">
+                    Nombres de jours ouvrés: {{ daysOpen }}
+                  </div>
+                  <div class="alert alert-success" role="alert">
+                    ETP: {{ ETP }}
+                  </div>
+                  <div class="alert alert-success" role="alert">
+                    Nombre d'heure à faire: {{ nbrHour }}
+                  </div>
             
         </form>
-
+    </div>
             
 <script>
 
@@ -187,16 +203,25 @@ var demo = new Vue({
         dateStart: "",
         dateEnd: "",
         contractTime: "",
-        daysOff:""},
+        daysOff:"",
+        daysOpen:"",
+        ETP:"",
+        nbrHour:""},
     methods: {
         clic: function(event) {
             
             var date1 = moment(this.dateStart,"DD-MM-YYYY");
             var date2 = moment(this.dateEnd,"DD-MM-YYYY");
             this.contractTime = date2.diff(date1, "days");
-            var mod28 = this.contractTime % 28;
-            this.daysOff = mod28 * 2,08;
-            console.log(mod28);
+            this.daysOpen = Math.ceil(this.contractTime / 7 * 5);
+            var month = this.contractTime / 28;
+            this.daysOff = Math.ceil(month * 2,08);
+            if(this.daysOff>25){
+                this.daysOff =25;
+            }
+
+            this.ETP = this.ETP/35;
+            this.nbrHour =this.daysOpen * 7 * this.ETP;
     }
     }});
         
